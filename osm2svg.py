@@ -2,6 +2,7 @@
 
 from IPython import embed
 from lxml import etree
+import math
 import json
 
 # Setup - edit these configuration variables as necessary
@@ -35,8 +36,11 @@ def __main__():
   minlon = float(b.get('minlon'))
   maxlon = float(b.get('maxlon'))
   
-  scale = outWidth / (maxlon - minlon) # Multiply to convert lat/lon to pixels
-  outHeight = scale * (maxlat - minlat)
+  xscale = outWidth / (maxlon - minlon) # Multiply to convert lat/lon to pixels
+  # Scale the y axis based on the relative distortion of lat vs lon.
+  # This is a nasty substitute for real projection.
+  yscale = xscale / math.cos(maxlat / 180.0 * math.pi)
+  outHeight = yscale * (maxlat - minlat)
   
   # Load all the datapoints into memory
   # This will let us do (relatively) fast lookups when rendering, rather than
@@ -74,7 +78,7 @@ def __main__():
       if nodeid in nodes:
         lon = float(nodes[nodeid][0])
         lat = float(nodes[nodeid][1])
-        points += '%f %f ' % ((lon - minlon)*scale, (lat-minlat)*scale)
+        points += '%f %f ' % ((lon - minlon)*xscale, outHeight - (lat-minlat)*yscale)
       else:
         print "Error finding node %s for way %s" % (nodeid, way.get('id'))
         
