@@ -3,7 +3,7 @@
 "highway": {
   "fill": "none",
   "stroke": "black",
-  "stroke-width": 5
+  "stroke-width": 2
 },
 
 "highway.primary": {
@@ -12,16 +12,23 @@
   "stroke-width": 10
 },
 
+"highway.trunk": {
+  "fill": "none",
+  "stroke": "black",
+  "stroke-width": 10
+},
+
+"highway.track": {
+  "fill": "none",
+  "stroke": "brown",
+  "stroke-dasharray": "5, 10",
+  "stroke-width": 5
+},
+
 "waterway": {
   "fill": "none",
   "stroke": "blue",
   "stroke-width": 5
-},
-
-"building": {
-  "fill": "none",
-  "stroke": "red",
-  "stroke-width": 1
 }
 
 }
