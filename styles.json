@@ -1,0 +1,28 @@
+{
+
+"highway": {
+  "fill": "none",
+  "stroke": "black",
+  "stroke-width": 5
+},
+
+"highway.primary": {
+  "fill": "none",
+  "stroke": "black",
+  "stroke-width": 10
+},
+
+"waterway": {
+  "fill": "none",
+  "stroke": "blue",
+  "stroke-width": 5
+},
+
+"building": {
+  "fill": "none",
+  "stroke": "red",
+  "stroke-width": 1
+}
+
+}
+

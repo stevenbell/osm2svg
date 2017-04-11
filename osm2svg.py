@@ -6,12 +6,19 @@ import json
 
 # Setup - edit these configuration variables as necessary
 inputFile = 'map.osm'
+styleFile = 'styles.json'
 outputFile = 'out.svg'
 outWidth = 1000 # Width of the output, in pixels
 # The height will be calculated automatically based on the aspect ratio of the
 # downloaded chunk of OSM data.
 
 def __main__():
+  # Load the style file
+  styleDef = json.load(open(styleFile))
+  styles = {}
+  for tag,attrs in styleDef.items():
+    styles[tag] = ' '.join(["%s=\"%s\"" %(k,str(v)) for k,v in attrs.items()])
+
   # Load the OSM file
   document = etree.parse(open(inputFile))
   
@@ -49,12 +56,14 @@ def __main__():
     style = None
   
     for tag in way.findall('tag'):
-      if tag.get('k') == 'highway':
-        style = 'stroke="orange" fill="none" stroke-width="3"'
-      # elif tag.get('k') == 'building':
-      #   style = 'stroke="red" fill="red" stroke-width="1"'
-      #print "%s %s" % (tag.get('k'), tag.get('v'))
-  
+      searchtag = tag.get('k') + '.' + tag.get('v')
+      if searchtag in styles: # search for key.value in styles
+        style = styles[searchtag]
+        break # Found a style, quit right away
+      elif tag.get('k') in styles: # failed, just search for key
+        style = styles[tag.get('k')]
+        break # Found a style, quit right away
+ 
     # If there is no assigned style, skip this way completely
     if style is None:
       continue
@@ -73,6 +82,7 @@ def __main__():
   
   out.write('</svg>')
 
-import cProfile
-cProfile.run('__main__()')
+#import cProfile
+#cProfile.run('__main__()')
+__main__()
 
